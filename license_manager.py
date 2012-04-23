@@ -50,6 +50,9 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     con.commit()
     cursor.close()
 
+def list_items(license, ancestor, url, database):
+    #
+
 
 def main():
     license_names = ['CC-BY', 'CC-BY-SA', 'GPL3', 'GPL2', 'CC0']
@@ -59,6 +62,7 @@ def main():
     subparsers = parser.add_subparsers()
 
     parser_add = subparsers.add_parser('add', help='Adds a new piece of media.')
+    parser_add.set_defaults(which='add')
 
     parser_add.add_argument('file', action='store',
             type=argparse.FileType('rb'),
@@ -78,6 +82,7 @@ def main():
                 ./media.db'))
 
     parser_list = subparsers.add_parser('list', help='Lists media in database.')
+    parser_list.set_defaults(which='list')
 
     parser_list.add_argument('-l', '--license', action='store', dest='license',
             choices=license_names,
@@ -88,19 +93,23 @@ def main():
             help='List by attribution URL.')
 
     args = parser.parse_args()
-    #Calculate MD5 of the new file.
-    md5 = calculate_MD5(args.file)
-    name = args.file.name
-    license = args.license
-    ancestor = args.ancestor
-    ancestor_name = None
-    ancestor_md5 = None
 
-    if ancestor != None:
-        ancestor_name = ancestor.name
-        ancestor_md5 = calculate_MD5(ancestor)
+    if args.which == 'add':
+        #Calculate MD5 of the new file.
+        md5 = calculate_MD5(args.file)
+        name = args.file.name
+        license = args.license
+        ancestor = args.ancestor
+        ancestor_name = None
+        ancestor_md5 = None
 
-    insert_item(args.file, name, md5, license, ancestor_name, ancestor_md5, args.database)
+        if ancestor != None:
+            ancestor_name = ancestor.name
+            ancestor_md5 = calculate_MD5(ancestor)
+
+        insert_item(args.file, name, md5, license, ancestor_name, ancestor_md5, args.database)
+    elif args.which == 'list':
+        list_items(args.license, args.ancestor, args.url, args.database)
 
 if __name__ == '__main__':
     main()
