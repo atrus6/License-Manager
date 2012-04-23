@@ -80,6 +80,9 @@ def main():
     name = args.file.name
     license = args.license
     ancestor = args.ancestor
+    ancestor_name = None
+    ancestor_md5 = None
+
     if ancestor != None:
         ancestor_name = ancestor.name
         ancestor_md5 = calculate_MD5(ancestor)
