@@ -1,4 +1,6 @@
-### License Manager
+License Manager
+===============
+
 A simple python script that help keep track of a larger
 amount of licensed work, as opposed to a simple txt file.
 
@@ -8,7 +10,8 @@ specified with -d.
 
 Requires python3 and sqlite
 
-### To use
+To use
+------
 
 python license_manager.py add path/to/file license
 
@@ -27,7 +30,8 @@ with optional tags
 * -u/--url filters by attribution URL
 * -a/--ancestor filters by ancestor
 
-### TODO
+TODO
+----
 
 * Ability to extract added files.
 * Add more license types.
