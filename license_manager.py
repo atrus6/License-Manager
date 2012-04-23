@@ -50,6 +50,9 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
                 license,
                 ancestor_name, ancestor_md5))
 
+    con.commit()
+    cursor.close()
+
 
 def main():
     parser = argparse.ArgumentParser(
