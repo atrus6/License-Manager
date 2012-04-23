@@ -92,6 +92,8 @@ def main():
             help='List by common ancestor.')
     parser_list.add_argument('-u', '--url', action='store', dest='url',
             help='List by attribution URL.')
+    parser_list.add_argument('-d', '--database', action='store', dest='database',
+            help='Location of database. Assumes ./models.db if not present.'
 
     args = parser.parse_args()
 
