@@ -43,7 +43,7 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     if table_exists == None:
         create_table(cursor)
 
-    cursor.execute('INSERT INTO media (name, md5, license, file, ancestorName, ancestorMD5)\
+    cursor.execute('INSERT INTO media (name, md5, license, file, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
             (filename, file_md5, license, ancestor_name, ancestor_md5))
 
