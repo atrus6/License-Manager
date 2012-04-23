@@ -39,7 +39,7 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     if table_exists == None:
         create_table(cursor)
 
-    cursor.execute('INSERT INTO media (name, md5, license, file, ancestor_name, ancestor_md5)\
+    cursor.execute('INSERT INTO media (name, md5, file, license, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
             (filename,
                 str(file_md5),
@@ -52,6 +52,7 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
 
 
 def main():
+    license_names = ['CC-BY', 'CC-BY-SA', 'GPL3', 'GPL2', 'CC0']
     parser = argparse.ArgumentParser(
             description='Handles media licensing information')
 
@@ -63,7 +64,7 @@ def main():
             type=argparse.FileType('rb'),
             help='The file path of the media to be added.')
     parser_add.add_argument('license', action='store',
-            choices=['CC-BY', 'CC-BY-SA', 'GPL3', 'GPL2', 'CC0'],
+            choices=license_names,
             help='The license the media is under.')
     parser_add.add_argument('-u', '--url', action='store', dest='url',
             help='The attribution URL for the media.')
@@ -76,6 +77,15 @@ def main():
             help=('Database to work on. If none give, the assumed location is \
                 ./media.db'))
 
+    parser_list = subparsers.add_parser('list', help='Lists media in database.')
+
+    parser_list.add_argument('-l', '--license', action='store', dest='license',
+            choices=license_names,
+            help="List by license types")
+    parser_list.add_argument('-a', '--ancestor', action='store', dest='ancestor',
+            help='List by common ancestor.')
+    parser_list.add_argument('-u', '--url', action='store', dest='url',
+            help='List by attribution URL.')
 
     args = parser.parse_args()
     #Calculate MD5 of the new file.
