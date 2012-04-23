@@ -29,7 +29,7 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     con = None
     cursor = None
 
-    if args.database == NoneType:
+    if db == None:
         con = sqlite.connect('media.db')
         cursor = con.cursor()
 
