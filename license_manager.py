@@ -21,10 +21,10 @@ def main():
 
     parser_add = subparsers.add_parser('add', help='Adds a new piece of media.')
 
-    parser_add.add_argument('-f', '--file', action='store', dest='filename',
+    parser_add.add_argument('file', action='store',
             type=argparse.FileType('r'),
             help='The file path of the media to be added.')
-    parser_add.add_argument('-l', '--license', action='store', dest='license',
+    parser_add.add_argument('license', action='store',
             choices=['CC-BY', 'CC-BY-SA', 'GPL3', 'GPL2', 'CC0'],
             help='The license the media is under.')
     parser_add.add_argument('-u', '--url', action='store', dest='url',
