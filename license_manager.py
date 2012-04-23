@@ -2,6 +2,12 @@ import argparse
 import hashlib
 import sqlite3
 
+def xstr(string, nrep=''):
+    if string == None:
+        return nrep
+    else:
+        return string
+
 def calculate_MD5(file_handler):
 
     file_hash = hashlib.md5()
@@ -76,8 +82,9 @@ def list_items(license, ancestor, url, database):
     else:
         cursor.execute('SELECT name, license, url, ancestor_name FROM media')
 
+    labels = ['Name: ', 'License: ', 'URL: ', 'Ancestor: ']
     for row in cursor:
-        print(row)
+        print(labels[0] + row[0] + ' ' + labels[1] + row[1] + ' ' + labels[2] + row[2] + ' ' + labels[3] + row[3])
 
 
 def main():
