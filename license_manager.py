@@ -20,9 +20,7 @@ def create_table(cursor):
                 ancestor_md5 TEXT,       \
                 PRIMARY KEY(name, md5))')
 
-
-
-def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, ancestor_md5, db):
+def open_database(db):
     con = None
     cursor = None
 
@@ -40,6 +38,13 @@ def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, an
     if table_exists == None:
         create_table(cursor)
 
+    return con, cursor
+
+
+
+def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, ancestor_md5, db):
+    con, cursor = open_database(db)
+
     cursor.execute('INSERT INTO media (name, md5, file, license, url, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
             (filename,
@@ -52,7 +57,27 @@ def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, an
     cursor.close()
 
 def list_items(license, ancestor, url, database):
-    #
+    con, cursor = open_database(database)
+
+    cstr = ''
+    if license != None:
+        cstr + 'license = "' + license + '" '
+
+    if ancestor != None:
+        ancestor_name = ancestor.name
+        ancestor_md5 = calculate_md5(ancestor)
+        cstr + 'ancestor_name = "' + ancestor_name + '" '
+
+    if url != None:
+        cstr + 'url = "' + url + '" '
+
+    if cstr != '':
+        cursor.execute('SELECT name, license, url, ancestor_name FROM media WHERE ' + cstr)
+    else:
+        cursor.execute('SELECT name, license, url, ancestor_name FROM media')
+
+    for row in cursor:
+        print(row)
 
 
 def main():
@@ -93,7 +118,7 @@ def main():
     parser_list.add_argument('-u', '--url', action='store', dest='url',
             help='List by attribution URL.')
     parser_list.add_argument('-d', '--database', action='store', dest='database',
-            help='Location of database. Assumes ./models.db if not present.'
+            help='Location of database. Assumes ./models.db if not present.')
 
     args = parser.parse_args()
 
