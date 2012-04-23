@@ -14,6 +14,7 @@ def create_table(cursor):
                 (name TEXT,              \
                 md5 TEXT,                \
                 license TEXT,            \
+                url TEXT,                \
                 file BLOB,               \
                 ancestor_name TEXT,      \
                 ancestor_md5 TEXT,       \
@@ -21,7 +22,7 @@ def create_table(cursor):
 
 
 
-def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancestor_md5, db):
+def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, ancestor_md5, db):
     con = None
     cursor = None
 
@@ -39,12 +40,12 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     if table_exists == None:
         create_table(cursor)
 
-    cursor.execute('INSERT INTO media (name, md5, file, license, ancestor_name, ancestor_md5)\
+    cursor.execute('INSERT INTO media (name, md5, file, license, url, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
             (filename,
                 str(file_md5),
                 file_handle.read(),
-                license,
+                license, url,
                 ancestor_name, ancestor_md5))
 
     con.commit()
@@ -98,7 +99,6 @@ def main():
         #Calculate MD5 of the new file.
         md5 = calculate_MD5(args.file)
         name = args.file.name
-        license = args.license
         ancestor = args.ancestor
         ancestor_name = None
         ancestor_md5 = None
@@ -107,7 +107,7 @@ def main():
             ancestor_name = ancestor.name
             ancestor_md5 = calculate_MD5(ancestor)
 
-        insert_item(args.file, name, md5, license, ancestor_name, ancestor_md5, args.database)
+        insert_item(args.file, name, md5, args.license, args.url, ancestor_name, ancestor_md5, args.database)
     elif args.which == 'list':
         list_items(args.license, args.ancestor, args.url, args.database)
 
