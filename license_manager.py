@@ -30,18 +30,18 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
     cursor = None
 
     if db == None:
-        con = sqlite.connect('media.db')
-        cursor = con.cursor()
-
-        #Test if the table exists or we just opened up something new.
-        cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="media"')
-        table_exists = cursor.fetchone()
-
-        if table_exists == None:
-            create_table(cursor)
+        con = sqlite3.connect('media.db')
     else:
-        con = sqlite.connect(db)
-        cursor = con.cursor()
+        con = sqlite3.connect(db)
+
+    cursor = con.cursor()
+
+    #Test if the table exists or we just opened up something new.
+    cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="media"')
+    table_exists = cursor.fetchone()
+
+    if table_exists == None:
+        create_table(cursor)
 
     cursor.execute('INSERT INTO media (name, md5, license, file, ancestorName, ancestorMD5)\
             VALUES (?, ?, ?, ?, ?, ?)',
