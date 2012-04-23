@@ -46,7 +46,7 @@ def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, an
     con, cursor = open_database(db)
 
     cursor.execute('INSERT INTO media (name, md5, file, license, url, ancestor_name, ancestor_md5)\
-            VALUES (?, ?, ?, ?, ?, ?)',
+            VALUES (?, ?, ?, ?, ?, ?, ?)',
             (filename,
                 str(file_md5),
                 file_handle.read(),
