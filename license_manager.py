@@ -5,13 +5,9 @@ import sqlite3
 def calculate_MD5(file_handler):
 
     file_hash = hashlib.md5()
-    while True:
-        try:
-            file_hash.update(args.filename.read(8192))
-        except:
-            break
+    file_hash.update(file_handler.read())
 
-    return file_hash.digest()
+    return file_hash.hexdigest()
 
 def create_table(cursor):
     cursor.execute('CREATE TABLE media   \
@@ -45,7 +41,8 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
 
     cursor.execute('INSERT INTO media (name, md5, license, file, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
-            (filename, file_md5,
+            (filename,
+                str(file_md5),
                 file_handle.read(),
                 license,
                 ancestor_name, ancestor_md5))
