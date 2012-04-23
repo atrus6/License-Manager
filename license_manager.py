@@ -45,7 +45,10 @@ def insert_item(file_handle, filename, file_md5, license, ancestor_name, ancesto
 
     cursor.execute('INSERT INTO media (name, md5, license, file, ancestor_name, ancestor_md5)\
             VALUES (?, ?, ?, ?, ?, ?)',
-            (filename, file_md5, license, ancestor_name, ancestor_md5))
+            (filename, file_md5,
+                file_handle.read(),
+                license,
+                ancestor_name, ancestor_md5))
 
 
 def main():
@@ -57,7 +60,7 @@ def main():
     parser_add = subparsers.add_parser('add', help='Adds a new piece of media.')
 
     parser_add.add_argument('file', action='store',
-            type=argparse.FileType('r'),
+            type=argparse.FileType('rb'),
             help='The file path of the media to be added.')
     parser_add.add_argument('license', action='store',
             choices=['CC-BY', 'CC-BY-SA', 'GPL3', 'GPL2', 'CC0'],
@@ -65,7 +68,7 @@ def main():
     parser_add.add_argument('-u', '--url', action='store', dest='url',
             help='The attribution URL for the media.')
     parser_add.add_argument('-a', '--ancestor', action='store', dest='ancestor',
-            type=argparse.FileType('r'),
+            type=argparse.FileType('rb'),
             help='The file path of the parent of this derivitive work.')
 
     parser_add.add_argument('-d', '--database', action='store', dest='database',
