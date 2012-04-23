@@ -64,18 +64,17 @@ def insert_item(file_handle, filename, file_md5, license, url, ancestor_name, an
 
 def list_items(license, ancestor, url, database):
     con, cursor = open_database(database)
-
     cstr = ''
     if license != None:
-        cstr + 'license = "' + license + '" '
+        cstr = cstr + 'license = "' + license + '" '
 
     if ancestor != None:
         ancestor_name = ancestor.name
         ancestor_md5 = calculate_md5(ancestor)
-        cstr + 'ancestor_name = "' + ancestor_name + '" '
+        cstr = cstr + 'ancestor_name = "' + ancestor_name + '" '
 
     if url != None:
-        cstr + 'url = "' + url + '" '
+        cstr = cstr + 'url = "' + url + '" '
 
     if cstr != '':
         cursor.execute('SELECT name, license, url, ancestor_name FROM media WHERE ' + cstr)
@@ -84,7 +83,8 @@ def list_items(license, ancestor, url, database):
 
     labels = ['Name: ', 'License: ', 'URL: ', 'Ancestor: ']
     for row in cursor:
-        print(labels[0] + row[0] + ' ' + labels[1] + row[1] + ' ' + labels[2] + row[2] + ' ' + labels[3] + row[3])
+        print(labels[0] + xstr(row[0], 'None') + ' ' + labels[1] + xstr(row[1], 'None') + ' ' +
+                labels[2] + xstr(row[2], 'None') + ' ' + labels[3] + xstr(row[3], 'None'))
 
 
 def main():
