@@ -76,12 +76,13 @@ def main():
 
     args = parser.parse_args()
     #Calculate MD5 of the new file.
-    md5 = calculate_MD5(args.filename)
-    name = args.filename.name
+    md5 = calculate_MD5(args.file)
+    name = args.file.name
     license = args.license
     ancestor = args.ancestor
-    ancestor_name = ancestor.name
-    ancestor_md5 = calculate_MD5(ancestor)
+    if ancestor != None:
+        ancestor_name = ancestor.name
+        ancestor_md5 = calculate_MD5(ancestor)
 
     insert_item(args.file, name, md5, license, ancestor_name, ancestor_md5, args.database)
 
